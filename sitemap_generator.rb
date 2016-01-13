@@ -13,11 +13,9 @@ class SitemapGenerator
 
   def generate
     pages = site.pages
-    default_lang = site.config['default_lang']
-
+    default_lang = site.config['default_lang'] || 'en'
     # generate only once
     return unless default_lang == site.active_lang
-
     sitemap = {}.extend(XKeys::Hash)
 
     sitemap['__CONFIG__', 'default_locale'] = default_lang
@@ -45,7 +43,7 @@ class SitemapGenerator
   end
 
   def localized_urls(site, page)
-    site.config['languages'].map do |locale|
+    (site.config['languages'] || ['en']).map do |locale|
       { locale => page.url(locale) }
     end.inject({}, :merge)
   end

@@ -98,7 +98,7 @@ module Jekyll
   # certain conditions
   module Convertible
     def lang
-      data['lang'] || site.config['default_lang']
+      data['lang'] || site.config['default_lang'] || 'en'
     end
 
     def lang=(str)
