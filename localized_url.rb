@@ -10,10 +10,12 @@ module Jekyll
     def url(locale = nil)
       return url_orig if locale.nil?
 
+      page_permalink = data['permalink_localized'].nil? ? data['permalink'] : data['permalink_localized'][locale]
+
       u = URL.new({
         template: template,
         placeholders: url_placeholders,
-        permalink: (data['permalink_localized'] && data['permalink_localized'][locale])
+        permalink: page_permalink
       }).to_s
       u = '/' + locale + u unless locale == site.default_lang
 
