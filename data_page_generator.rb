@@ -18,6 +18,12 @@ module Jekyll
       self.read_yaml(File.join(base, '_layouts'), template + ".html")
       self.data.merge!(data)
       self.data['title'] ||= name
+      permalink = self.data['permalink']
+
+      if permalink && !(permalink.end_with?('/') || permalink.end_with?('.html'))
+        p "Permalink #{permalink} is invalid. Must ends with '/' or html extension"
+        self.data['permalink'] += '.html'
+      end
     end
 
     private
