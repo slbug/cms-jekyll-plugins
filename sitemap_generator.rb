@@ -28,7 +28,7 @@ class SitemapGenerator
       url = '__ROOT__' + url
 
       path = url.split('/')
-      label = path.last
+      label = path.last == 'index.html' && path.length > 2 ? path[-2] : path.last
       path = path[0..-2] + ['__PAGES__']
 
       source_path = page.is_a?(Jekyll::DataPage) ? page.source_path : page.path
