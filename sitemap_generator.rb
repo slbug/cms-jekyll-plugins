@@ -20,6 +20,7 @@ class SitemapGenerator
 
     sitemap['__CONFIG__', 'default_locale'] = default_lang
     sitemap['__CONFIG__', 'page_gen'] = site.config['page_gen']
+    sitemap['__CONFIG__', 'locales'] = site.config['languages']
 
     pages.each do |page|
       url = page.url
