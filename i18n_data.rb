@@ -15,9 +15,9 @@ module Jekyll
     end
 
     def convert_models(models)
-      data_pages = @site.config['page_gen'].map{|p| p['data'] }
+      data_pages = (@site.config['page_gen'] || []).map{|p| p['data'] }
 
-      models.each do |model, values|
+      (models || []).each do |model, values|
         if values.kind_of?(Hash) && !data_pages.include?(model)
           models[model] = [].tap do |content|
             values.keys.map(&:to_i).sort.each do |key|
