@@ -12,7 +12,7 @@ class DataObject
     values = values.map(&:to_s)
 
     if definitions.has_key?(key) && definitions[key].has_key?('type') && definitions[key]['type'] == 'model'
-      storage.send "find_#{definitions[key]['model_name']}_by_#{definitions[key]['display_field']}", values
+      storage.send "find_#{definitions[key]['model_name']}_by_#{definitions[key]['foreign_key'] || 'id'}", values
     else
       values.include? data[key].to_s
     end
@@ -24,7 +24,7 @@ class DataObject
     else
       name = name.to_s
       if definitions.has_key?(name) && definitions[name].has_key?('type') && definitions[name]['type'] == 'model'
-        storage.send "find_#{definitions[name]['model_name']}_by_#{definitions[name]['display_field']}", data[name]
+        storage.send "find_#{definitions[name]['model_name']}_by_#{definitions[name]['foreign_key'] || 'id'}", data[name]
       else
         data[name]
       end
