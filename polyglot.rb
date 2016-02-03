@@ -3,7 +3,7 @@
 #   author Samuel Volin (@untra)
 #   github: https://github.com/untra/polyglot
 #   license: MIT
-include Process
+#include Process
 module Jekyll
   # Alteration to Jekyll Site class
   # provides aliased methods to direct site.write to output into seperate
