@@ -16,8 +16,9 @@ class DataStorage
   def initialize(models, definitions)
     @collection = {}
 
+    models_path = File.expand_path("../../_data/_models", __FILE__)
     models.each do |model_name, model_data|
-      Dir.chdir("#{Dir.pwd}/_data/_models/#{model_name}") do
+      Dir.chdir("#{models_path}/#{model_name}") do
         raise "_data/_models/#{model_name} contains subdirectories" if Dir.glob('*').any?{|f| File.directory? f }
       end
       collection[model_name] = model_data.map{|d| DataObject.new(d, definitions[model_name] || {}, self) }
