@@ -13,15 +13,14 @@ class SitemapGenerator
 
   def generate
     pages = site.pages
-    default_lang = site.config['default_lang']
-
+    default_lang = site.config['default_lang'] || 'en'
     # generate only once
     return unless default_lang == site.active_lang
-
     sitemap = {}.extend(XKeys::Hash)
 
     sitemap['__CONFIG__', 'default_locale'] = default_lang
     sitemap['__CONFIG__', 'page_gen'] = site.config['page_gen']
+    sitemap['__CONFIG__', 'locales'] = site.config['languages']
 
     pages.each do |page|
       url = page.url
@@ -30,7 +29,7 @@ class SitemapGenerator
       url = '__ROOT__' + url
 
       path = url.split('/')
-      label = path.last
+      label = path.last == 'index.html' && path.length > 2 ? path[-2] : path.last
       path = path[0..-2] + ['__PAGES__']
 
       source_path = page.is_a?(Jekyll::DataPage) ? page.source_path : page.path
@@ -45,7 +44,7 @@ class SitemapGenerator
   end
 
   def localized_urls(site, page)
-    site.config['languages'].map do |locale|
+    (site.config['languages'] || ['en']).map do |locale|
       { locale => page.url(locale) }
     end.inject({}, :merge)
   end
