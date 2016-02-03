@@ -23,6 +23,10 @@ module Jekyll
     alias_method :process_orig, :process
     def process
       prepare
+      languages.each do |lang|
+        process_language lang
+      end
+=begin
       pids = {}
       languages.each do |lang|
         pids[lang] = Process.fork do
@@ -45,6 +49,7 @@ module Jekyll
         Process.waitpid pids[lang]
         Process.detach pids[lang]
       end
+=end
     end
 
     alias_method :site_payload_orig, :site_payload
