@@ -23,28 +23,50 @@ module Jekyll
     alias_method :process_orig, :process
     def process
       prepare
-      pids = {}
+      threads = []
       languages.each do |lang|
-        pids[lang] = Process.fork do
+        threads << Thread.new do
           process_language lang
         end
       end
+      
+      threads.each { |thr| thr.join }
+      
       old_handler = Signal.trap('INT') do
         old_handler.call
 
-        languages.each do |lang|
+        threads.each do |thr|
           begin
-            puts "Killing #{pids[lang]} : #{lang}"
-            Process.kill('INT', pids[lang])
+            puts "Killing #{thr}}"
+            Thread.kill(thr)
           rescue Errno::ESRCH
-            puts "Process #{pids[lang]} : #{lang} not running"
+            puts "Thread #{thr} : not running"
           end
         end
       end
-      languages.each do |lang|
-        Process.waitpid pids[lang]
-        Process.detach pids[lang]
-      end
+      
+      # pids = {}
+      # languages.each do |lang|
+      #   pids[lang] = Process.fork do
+      #     process_language lang
+      #   end
+      # end
+      # old_handler = Signal.trap('INT') do
+      #   old_handler.call
+      #
+      #   languages.each do |lang|
+      #     begin
+      #       puts "Killing #{pids[lang]} : #{lang}"
+      #       Process.kill('INT', pids[lang])
+      #     rescue Errno::ESRCH
+      #       puts "Process #{pids[lang]} : #{lang} not running"
+      #     end
+      #   end
+      # end
+      # languages.each do |lang|
+      #   Process.waitpid pids[lang]
+      #   Process.detach pids[lang]
+      # end
     end
 
     alias_method :site_payload_orig, :site_payload
