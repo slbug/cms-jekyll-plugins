@@ -15,7 +15,7 @@ module Jekyll
     end
 
     def detect_page(site, path, data_dir)
-      token = [data_dir, path].compact.join('/')
+      token = [data_dir, (path || '').downcase].compact.join('/')
       token = '/' + token unless token.start_with?('/')
 
       page = site.pages.detect do |p|
